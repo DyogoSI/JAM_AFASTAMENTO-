@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Afastamento de Pessoal - JAM Engenharia</title>
+    <meta charset="utf-8">
+    
+    <link type="text/css" rel="stylesheet" href="/style-guide/css/fluig-style-guide.min.css"/>
+    
+    <script type="text/javascript" src="/portal/resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/portal/resources/js/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/portal/resources/js/mustache/mustache-min.js"></script>
+    <script type="text/javascript" src="/style-guide/js/fluig-style-guide.min.js" charset="utf-8"></script>
+    
+    <script type="text/javascript" src="/webdesk/vcXMLRPC.js"></script>
+    <script type="text/javascript" src="fluigFormAttachment.min.js"></script>
+    
+    <style>
+        /* =========================================
+           RESET E BACKGROUND
+        ========================================= */
+        * { box-sizing: border-box; }
+        body, html { background: #ffffff !important; min-height: 100vh; font-family: 'Segoe UI', Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+        form { padding: 40px 20px; max-width: 98%; margin: 0 auto; }
+        .container-fluid { width: 100%; }
+        .row { display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px; }
+        .col-md-2 { flex: 0 0 16.666667%; max-width: 16.666667%; padding: 0 15px; }
+        .col-md-3 { flex: 0 0 25%; max-width: 25%; padding: 0 15px; }
+        .col-md-4 { flex: 0 0 33.333333%; max-width: 33.333333%; padding: 0 15px; }
+        .col-md-5 { flex: 0 0 41.666667%; max-width: 41.666667%; padding: 0 15px; }
+        .col-md-6 { flex: 0 0 50%; max-width: 50%; padding: 0 15px; }
+        .col-md-7 { flex: 0 0 58.333333%; max-width: 58.333333%; padding: 0 15px; }
+        .col-md-8 { flex: 0 0 66.666667%; max-width: 66.666667%; padding: 0 15px; }
+        .col-md-9 { flex: 0 0 75%; max-width: 75%; padding: 0 15px; }
+        .col-md-10 { flex: 0 0 83.333333%; max-width: 83.333333%; padding: 0 15px; }
+        .col-md-12 { flex: 0 0 100%; max-width: 100%; padding: 0 15px; }
+        .form-group { margin-bottom: 15px; width: 100%; }
+        @media (max-width: 768px) { .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10 { flex: 0 0 100%; max-width: 100%; } }
+        .page-header { background-color: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06); border-top: 6px solid #2C75B9; text-align: center; margin-bottom: 35px; border-bottom: none; }
+        .page-header h2 { font-weight: 800; color: #F29620; margin: 0; letter-spacing: 0.5px; text-transform: uppercase; font-size: 24px; }
+        .panel { border-radius: 12px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); margin-bottom: 30px; background-color: #ffffff; overflow: hidden; display: block; width: 100%; border: none; }
+        .panel-default > .panel-heading, .panel-primary > .panel-heading, #divReabertura .panel-heading { background-color: #2C75B9; color: white; border: none; }
+        
+        .painel-obs-dinamico > .panel-heading { background-color: #F29620; color: white; border: none; transition: background-color 0.3s; }
+        .painel-correcao-dinamico > .panel-heading { background-color: #d9534f !important; color: white; border: none; transition: background-color 0.3s; }
+        .painel-bpo-dinamico > .panel-heading { background-color: #1e5283 !important; color: white; border: none; transition: background-color 0.3s; }
+        
+        .panel-heading { padding: 18px 25px; }
+        .panel-title { font-size: 17px; font-weight: 700; color: #ffffff; display: flex; align-items: center; text-transform: uppercase; letter-spacing: 1px; margin: 0; }
+        .panel-body { padding: 30px 25px; transition: all 0.3s ease; }
+        
+        .panel-title .fluigicon { margin-right: 10px; width: 18px; height: 18px; filter: brightness(0) invert(1); display: inline-block; background-size: contain; background-repeat: no-repeat; background-position: center; }
+        .panel-title .fluigicon::before { content: none !important; }
+        .fluigicon-user-config { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h274.9c-2.4-6.8-3.4-14-2.6-21.3l6.8-60.9 1.2-11.1 7.9-7.9 77.3-77.3c-24.5-27.7-60-45.5-99.9-45.5zm45.3 145.3l-6.8 61c-1.1 10.2 7.5 18.8 17.6 17.6l60.9-6.8 137.9-137.9-71.7-71.7-137.9 137.8zM633 268.9L595.1 231c-9.3-9.3-24.5-9.3-33.8 0l-37.8 37.8-4.1 4.1 71.8 71.7 41.8-41.8c9.3-9.4 9.3-24.5 0-33.9z"/></svg>'); }
+        .fluigicon-user { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>'); }
+        .fluigicon-form { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M104 96H56c-13.3 0-24 10.7-24 24v336c0 13.3 10.7 24 24 24h400c13.3 0 24-10.7 24-24V120c0-13.3-10.7-24-24-24h-48V16c0-8.8-7.2-16-16-16h-64c-8.8 0-16 7.2-16 16v80H216V16c0-8.8-7.2-16-16-16h-64c-8.8 0-16 7.2-16 16v80zM24 496c-13.2 0-24-10.8-24-24V120c0-13.2 10.8-24 24-24h48v32c0 17.7 14.3 32 32 32h64c17.7 0 32-14.3 32-32v-32h160v32c0 17.7 14.3 32 32 32h64c17.7 0 32-14.3 32-32v-32h48c13.2 0 24 10.8 24 24v352c0 13.2-10.8 24-24 24H24zM160 264V240c0-13.3-10.7-24-24-24H88c-13.3 0-24 10.7-24 24v24c0 13.3 10.7 24 24 24h48c13.3 0 24-10.7 24-24zm0 128v-24c0-13.3-10.7-24-24-24H88c-13.3 0-24 10.7-24 24v24c0 13.3 10.7 24 24 24h48c13.3 0 24-10.7 24-24zm288-128v-24c0-13.3-10.7-24-24-24H200c-13.3 0-24 10.7-24 24v24c0 13.3 10.7 24 24 24h224c13.3 0 24-10.7 24-24zm0 128v-24c0-13.3-10.7-24-24-24H200c-13.3 0-24 10.7-24 24v24c0 13.3 10.7 24 24 24h224c13.3 0 24-10.7 24-24z"/></svg>'); }
+        .fluigicon-checked { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>'); }
+        
+        label { font-weight: 700; color: #2C75B9; margin-bottom: 5px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; display: block; }
+        .form-control { border-radius: 6px !important; border: 1px solid #c0c6cc !important; padding: 6px 12px !important; height: 36px !important; line-height: 1.42857143 !important; font-size: 13px !important; color: #444 !important; transition: all 0.3s ease; display: block; width: 100%; background-color: #fff; box-sizing: border-box; font-family: inherit; }
+        textarea.form-control { height: auto !important; min-height: 100px !important; resize: vertical; padding: 10px 12px !important; }
+        select.form-control { appearance: auto; }
+        .form-control:focus { border-color: #F29620; box-shadow: 0 0 0 3px rgba(242, 150, 32, 0.15); outline: none; }
+        .form-control[readonly], .form-control[disabled] { background-color: #f4f6f9 !important; color: #7a828a !important; border-color: #e2e7ec !important; cursor: not-allowed; font-weight: 500; }
+        
+        /* LUPA E ZOOM */
+        .input-group { display: flex !important; width: 100% !important; align-items: stretch !important; height: 36px !important; }
+        .input-group .form-control { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; flex: 1 !important; margin: 0 !important; z-index: 1; height: 36px !important; }
+        .input-group-addon .fluigicon { display: none !important; }
+        .input-group-addon { background-color: #f4f6f9 !important; border: 1px solid #c0c6cc !important; border-left: none !important; border-radius: 0 6px 6px 0 !important; width: 40px !important; height: 36px !important; cursor: pointer; padding: 0 !important; margin: 0 !important; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16"><path fill="%232C75B9" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>') !important; background-repeat: no-repeat !important; background-position: center !important; background-size: 16px !important; }
+        .select2-container { width: 100% !important; }
+        .select2-container .select2-selection--single, .select2-container .select2-selection--multiple { min-height: 36px !important; height: 36px !important; border-radius: 6px !important; border: 1px solid #c0c6cc !important; padding: 0 8px !important; display: flex !important; align-items: center !important; background-color: #fff !important; overflow: hidden !important; }
+        .select2-container .select2-search--inline { float: none !important; margin: 0 !important; display: flex !important; align-items: center !important; }
+        .select2-container .select2-search--inline .select2-search__field { margin: 0 !important; height: 34px !important; line-height: 34px !important; font-size: 13px !important; padding-left: 4px !important; }
+        .select2-container .select2-selection__choice { margin: 0 !important; margin-right: 5px !important; padding: 2px 6px !important; font-size: 13px !important; border-radius: 4px !important; border: 1px solid #c0c6cc !important; background-color: #f4f6f9 !important; color: #1e5283 !important; font-weight: 600; }
+        .select2-container--default .select2-selection--single .select2-selection__rendered { line-height: normal !important; padding: 0 4px !important; font-size: 13px !important; color: #444 !important; width: 100%; }
+        .select2-container--default .select2-selection--single .select2-selection__arrow { height: 34px !important; top: 1px !important; }
+        
+        /* =========================================
+           ESTILOS DOS ANEXOS E BOTÕES "INJETADOS"
+        ========================================= */
+        .caixa-anexo { background-color: #f8fafd; border: 2px dashed #b1c8df; border-radius: 10px; padding: 20px; margin-top: 15px; }
+        .caixa-anexo label { color: #1e5283 !important; font-size: 14px; display: block; margin-bottom: 10px; }
+        .fluigFormAttachmentComponent { display: flex; width: 100%; gap: 8px; align-items: center; }
+        .fluigFormAttachmentComponent input { flex: 1; min-width: 0; }
+        .fluigFormAttachmentComponent_buttons { flex-shrink: 0; display: flex; gap: 5px; }
+        
+        .fluigFormAttachmentComponent_buttons .btn i { display: none !important; }
+        .fluigFormAttachmentComponent_buttons .btn, .btn-anexo-historico {
+            width: 32px !important; height: 32px !important;
+            background-repeat: no-repeat !important; background-position: center !important; background-size: 14px !important;
+            padding: 0 !important; border-radius: 4px !important; transition: all 0.2s ease; cursor: pointer;
+        }
+        
+        .fluigFormAttachmentBtnDeleteFile { background-color: #d9534f !important; border: 1px solid #d43f3a !important; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="%23ffffff" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>') !important; }
+        .fluigFormAttachmentBtnUploadFile { background-color: #5cb85c !important; border: 1px solid #4cae4c !important; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="%23ffffff" d="M364.2 83.8c-24.4-24.4-64-24.4-88.4 0l-184 184c-42.1 42.1-42.1 110.3 0 152.4s110.3 42.1 152.4 0l152-152c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-152 152c-64 64-167.6 64-231.6 0s-64-167.6 0-231.6l184-184c46.3-46.3 121.3-46.3 167.6 0s46.3 121.3 0 167.6l-176 176c-28.6 28.6-75 28.6-103.6 0s-28.6-75 0-103.6l144-144c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-144 144c-6.7 6.7-6.7 17.7 0 24.4s17.7 6.7 24.4 0l176-176c24.4-24.4 24.4-64 0-88.4z"/></svg>') !important; }
+        .fluigFormAttachmentBtnViewerFile, .btn-anexo-historico { background-color: #5bc0de !important; border: 1px solid #46b8da !important; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="%23ffffff" d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.4 78.1-95.4 92.9-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.8-35.7-46.1-87.7-92.9-131.1C433.5 68.8 368.8 32 288 32zM128 256a160 160 0 1 1 320 0 160 160 0 1 1 -320 0zm160 80a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/></svg>') !important; }
+        
+        .label-obrigatorio::after { content: " *"; color: #d9534f; font-weight: bold; }
+        
+        /* Estilos da nova Timeline (Container Cronológico) */
+        #historico-timeline { display: flex; flex-direction: column; gap: 25px; margin-top: 30px; margin-bottom: 30px; }
+        
+        /* Oculta a tabela original (Pai x Filho) para não ocupar espaço na tela */
+        .tabelas-ocultas { height: 0px; overflow: hidden; visibility: hidden; }
+        
+        /* Ajuste do checkbox no modo de visualização para ficar visível se marcado */
+        input[type="checkbox"][disabled]:checked { opacity: 1; accent-color: #4cae4c; }
+    </style>
+</head>
+<body>
+    <form name="form" role="form">
+        <!-- Campos Ocultos Originais do RM -->
+        <input type="hidden" id="TxtChapa" name="TxtChapa" />
+        <input type="hidden" id="CodPessoa" name="CodPessoa" />
+        <input type="hidden" id="TxtNomeCol" name="TxtNomeCol" />
+        <input type="hidden" id="DtLimitFer" name="DtLimitFer" />
+        <input type="hidden" id="txtDtAdm" name="txtDtAdm" />
+        <input type="hidden" id="txtMembCipaCod" name="txtMembCipaCod" />
+        <input type="hidden" id="CodTipo" name="CodTipo" />
+        <input type="hidden" id="CodCategoria" name="CodCategoria" />
+        <input type="hidden" id="txtSalOrigem" name="txtSalOrigem" />
+        <input type="hidden" id="TEMPRAZOCONTR" name="TEMPRAZOCONTR" />
+        <input type="hidden" id="FIMPRAZOCONTR" name="FIMPRAZOCONTR" />
+        <input type="hidden" id="NROFICHAREG" name="NROFICHAREG" />
+        <input type="hidden" id="CODRECEBIMENTO" name="CODRECEBIMENTO" />
+        <input type="hidden" id="CodFilialDestino" name="CodFilialDestino" />
+        
+        <!-- NOVO CAMPO OCULTO: Armazena a letra exata do status ("A", "F", "P", "T", etc) -->
+        <input type="hidden" id="codSituacaoOculto" name="codSituacaoOculto" />
+        
+        <!-- VARIÁVEIS OCULTAS DA TIMELINE -->
+        <input type="text" id="cpRespGestor2" name="cpRespGestor2" style="display:none;" />
+        <input type="text" id="cpDecisaoRH" name="cpDecisaoRH" style="display:none;" />
+        <input type="text" id="cpParecercol2" name="cpParecercol2" style="display:none;" />
+        <input type="text" id="cpFlagNovaRodada" name="cpFlagNovaRodada" style="display:none;" />
+        
+        <div class="container-fluid">
+            
+            <div class="page-header">
+                <h2>AFASTAMENTO DE PESSOAL</h2>
+            </div>
+            
+            <!-- DADOS DO SOLICITANTE -->
+            <div class="panel panel-default" id="painelSolicitante">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fluigicon fluigicon-user-config fluigicon-sm"></i> Dados do Solicitante</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3 form-group">
+                            <label for="nSolicitacao">N. Solicitação</label>
+                            <input type="text" class="form-control" name="nSolicitacao" id="nSolicitacao" readonly>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label for="dataAbertura">Data Abertura</label>
+                            <input type="text" class="form-control" name="dataAbertura" id="dataAbertura" readonly>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="solicitante">Solicitante</label>
+                            <input type="text" class="form-control" name="solicitante" id="solicitante" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- DADOS DO COLABORADOR -->
+            <div class="panel panel-primary" id="painelColaborador">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fluigicon fluigicon-user fluigicon-sm"></i> Dados do Colaborador</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="empresaColab">Empresa-Filial</label>
+                            <input type="zoom" id="empresaColab" name="empresaColab"
+                                   data-zoom="{
+                                       'displayKey':'NOME',
+                                       'datasetId':'ds_empresaFilial',
+                                       'maximumSelectionLength':'1',
+                                       'placeholder':'Pesquise a coligada...',
+                                       'fields':[
+                                           {'field':'COLIGADA', 'label':'Coligada'},
+                                           {'field':'NOME', 'label':'Nome da Empresa', 'standard':'true','search':'true'},
+                                           {'field':'CODFILIAL', 'label':'Filial'},
+                                           {'field':'NOMEFANTASIAFILIAL', 'label':'Nome Filial', 'search':'true'}
+                                       ]
+                                   }" class="form-control" />
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="dptoObraColab">Dpto/Obra</label>
+                            <input type="zoom" id="dptoObraColab" name="dptoObraColab"
+                                   data-zoom="{
+                                       'displayKey':'DESCRICAO',
+                                       'datasetId':'ds_dptoObra',
+                                       'maximumSelectionLength':'1',
+                                       'placeholder':'Pesquise o dpto/obra...',
+                                       'fields':[
+                                           {'field':'CODIGO', 'label':'Código'},
+                                           {'field':'DESCRICAO', 'label':'Descrição do Dpto/Obra', 'standard':'true', 'search':'true'},
+                                           {'field':'CODFILIAL', 'visible':'false'},
+                                           {'field':'CODCOLIGADA', 'visible':'false'}
+                                       ]
+                                   }" class="form-control" />
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="nomeColaborador">Nome do Colaborador</label>
+                            <input type="zoom" id="nomeColaborador" name="nomeColaborador"
+                                   data-zoom="{
+                                       'displayKey':'NOME',
+                                       'datasetId':'ds_colaboradores',
+                                       'maximumSelectionLength':'1',
+                                       'placeholder':'Pesquise o colaborador...',
+                                       'fields':[
+                                           {'field':'CHAPA', 'label':'Matrícula'},
+                                           {'field':'NOME', 'label':'Nome', 'standard':'true', 'search':'true'},
+                                           {'field':'CARGO', 'visible':'false'},
+                                           {'field':'DATAADMISSAO', 'visible':'false'},
+                                           {'field':'TIPOFUNCIONARIO', 'visible':'false'},
+                                           {'field':'SITUACAO', 'visible':'false'},
+                                           {'field':'CODSITUACAO', 'visible':'false'},
+                                           {'field':'CODCOLIGADA', 'visible':'false'},
+                                           {'field':'CODFILIAL', 'visible':'false'},
+                                           {'field':'CODSECAO', 'visible':'false'}
+                                       ]
+                                   }" class="form-control" />
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-2 form-group">
+                            <label for="matricula">Matrícula</label>
+                            <input type="text" class="form-control" name="matricula" id="matricula" readonly>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label for="dataAdmissao">Data da Admissão</label>
+                            <input type="text" class="form-control" name="dataAdmissao" id="dataAdmissao" readonly>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="cargo">Cargo Atual</label>
+                            <input type="text" class="form-control" name="cargo" id="cargo" readonly>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label for="codSituacao">Situação</label>
+                            <input type="text" class="form-control" name="codSituacao" id="codSituacao" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-8 form-group">
+                            <label for="gestor">Gestor</label>
+                            <input type="text" class="form-control" name="gestor" id="gestor" readonly>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="tipoFuncionario">Tipo Funcionário</label>
+                            <input type="text" class="form-control" name="tipoFuncionario" id="tipoFuncionario" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela Oculta do Histórico de Afastamento RM (Integrada) -->
+            <div class="panel panel-default" style="display: none;">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fluigicon fluigicon-form fluigicon-sm"></i> Histórico de Afastamentos</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered" tablename="histAfastamentos" id="histAfastamentos" noaddbutton="false" nodeletebutton="false">
+                            <thead>
+                                <tr>
+                                    <th>Empresa</th><th>Filial</th><th>Chapa</th><th>Nome</th><th>Tipo Afastamento</th><th>Data Início</th><th>Data Fim</th><th>Motivo</th><th>Observação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" class="form-control" name="empresaHist" id="empresaHist"></td>
+                                    <td><input type="text" class="form-control" name="filialHist" id="filialHist"></td>
+                                    <td><input type="text" class="form-control" name="chapaHist" id="chapaHist"></td>
+                                    <td><input type="text" class="form-control" name="nomeHist" id="nomeHist"></td>
+                                    <td><input type="text" class="form-control" name="tipoAfastamentoHist" id="tipoAfastamentoHist"></td>
+                                    <td><input type="date" class="form-control" name="dataInicioHist" id="dataInicioHist"></td>
+                                    <td><input type="date" class="form-control" name="dataFimHist" id="dataFimHist"></td>
+                                    <td><input type="text" class="form-control" name="motivoHist" id="motivoHist"></td>
+                                    <td><input type="text" class="form-control" name="obsHist" id="obsHist"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DADOS DO AFASTAMENTO -->
+            <div class="panel panel-default" id="painelAfastamento">
+                <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 class="panel-title"><i class="fluigicon fluigicon-form fluigicon-sm"></i> Dados do Afastamento</h3>
+                    <div class="checkbox-validacao-bpo" style="display: none;">
+                        <label style="color: #ffffff; font-weight: bold; margin: 0; cursor: pointer;">
+                            <input type="checkbox" name="validaAfastamentoBPO" id="validaAfastamentoBPO" value="SIM" style="width: 14px; height: 14px; margin: 0 5px 0 0; vertical-align: middle;"> Validação BPO
+                        </label>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label class="label-obrigatorio">Ação</label>
+                            <select class="form-control" name="cpTipoAfastamento" id="cpTipoAfastamento" onchange="tratarAcaoAfastamento(this.value)">
+                                <option value="">Selecione...</option>
+                                <option value="1">Início/Fim Afastamento (Histórico)</option>
+                                <option value="2">Início Afastamento</option>
+                                <option value="3">Retorno Afastamento</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label id="lblDataInicio" class="label-obrigatorio">Data de Início</label>
+                            <input type="date" class="form-control" name="DataInicio" id="DataInicio">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label id="lblDataFim">Data de Fim</label>
+                            <input type="date" class="form-control" name="DataFim" id="DataFim">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label id="lblTipoAfastamento" class="label-obrigatorio">Tipo Afastamento</label>
+                            <input type="zoom" id="cpTipoAfastamentoRM" name="cpTipoAfastamentoRM" class="form-control"
+                                   data-zoom="{
+                                       'displayKey':'NOME',
+                                       'datasetId':'ds_tipoAfastamento',
+                                       'maximumSelectionLength':'1',
+                                       'placeholder':'Pesquise o tipo de afastamento...',
+                                       'fields':[
+                                           {'field':'CODIGO', 'label':'Código'},
+                                           {'field':'NOME', 'label':'Nome do Afastamento', 'standard':'true', 'search':'true'}
+                                       ]
+                                   }" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label id="lblMotivoAfastamento">Motivo Afastamento</label>
+                            <input type="zoom" id="cpMotivoAfastamento" name="cpMotivoAfastamento" class="form-control"
+                                   data-zoom="{
+                                       'displayKey':'DESCRICAO',
+                                       'datasetId':'ds-motivosituacao',
+                                       'maximumSelectionLength':'1',
+                                       'placeholder':'Pesquise o motivo do afastamento...',
+                                       'fields':[
+                                           {'field':'CODINTERNO', 'label':'Código'},
+                                           {'field':'DESCRICAO', 'label':'Descrição', 'standard':'true', 'search':'true'}
+                                       ]
+                                   }" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TIMELINE LIMPA: Aqui os painéis preenchidos serão injetados -->
+            <div id="historico-timeline"></div>
+
+            <!-- TABELA ORIGINAL OCULTA: Serve apenas para gravar os dados Pai x Filho -->
+            <div class="tabelas-ocultas">
+                <table class="table" tablename="tbInteracoes" id="tbInteracoes" noaddbutton="true" nodeletebutton="true" style="border:none; margin:0; padding:0; width:100%;">
+                    <thead><tr class="hide"><th></th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td class="td-interacao" style="border:none; padding:0;">
+                                 
+                                <input type="text" name="tipoInteracao" id="tipoInteracao" style="display:none;" />
+                                 
+                                <!-- DIV 1: PAINEL SOLICITANTE INICIAL -->
+                                <div class="panel panel-default painel-obs-dinamico painel-solicitante-dinamico" style="margin-bottom: 30px;">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">
+                                            <i class="fluigicon fluigicon-form fluigicon-sm"></i>
+                                            <span class="titulo-painel-solicitante">Observações e Anexos</span>
+                                        </h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-12 form-group">
+                                                <label>Observações Gerais</label>
+                                                <textarea class="form-control" rows="4" name="cpObservacoesGerais_tb" id="cpObservacoesGerais_tb" placeholder="Insira aqui observações adicionais..."></textarea>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- NOVA CAIXA DE AVISO DESTACADA -->
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 6px; padding: 12px 15px; margin-top: -5px; margin-bottom: 15px; font-weight: bold; font-size: 13px; display: flex; align-items: center;">
+                                                    <i class="fluigicon fluigicon-info-sign fluigicon-sm" style="margin-right: 8px; font-size: 16px;"></i>
+                                                    Favor anexar documento (Atestado que comprove o afastamento)
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row row-anexo-interno">
+                                            <div class="col-md-12">
+                                                <div class="caixa-anexo" style="margin-top: 0;">
+                                                    <label>
+                                                        <span class="fluigicon fluigicon-paperclip"></span> Documento Anexo
+                                                    </label>
+                                                    <div class="fluigFormAttachmentComponent">
+                                                        <input type="text" class="form-control" readonly name="cpAnexoGeral_tb" id="cpAnexoGeral_tb" data-filename="Anexo_Geral_Afastamento" data-accept="*">
+                                                        <div class="fluigFormAttachmentComponent_buttons area-botoes-anexo" style="display:none;">
+                                                            <button type="button" class="btn-anexo-historico btn-visualizar-injetado" title="Visualizar Anexo" style="display:none;"></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                 
+                                <!-- DIV 2: PAINEL BPO (OPERAÇÃO IRHO) -->
+                                <div class="panel panel-info painel-bpo-dinamico" style="margin-bottom: 30px;">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">
+                                            <i class="fluigicon fluigicon-checked fluigicon-sm"></i>
+                                            <span class="titulo-painel-bpo">Operação IRHO</span>
+                                        </h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <label>Analista Responsável (BPO)</label>
+                                                <input type="text" name="cpRespGestor2_tb" id="cpRespGestor2_tb" class="form-control" readonly />
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>Decisão</label>
+                                                <select name="cpDecisaoRH_tb" id="cpDecisaoRH_tb" class="form-control" onchange="$('#cpDecisaoRH').val(this.value); tratarAcaoBPO(this);">
+                                                    <option value="">Selecione...</option>
+                                                    <option value="Correto">Enviar solução</option>
+                                                    <option value="Incorreto">Devolver para o solicitante</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row linha-parecer-bpo" style="display: none;">
+                                            <div class="col-md-12 form-group">
+                                                <label>Parecer do BPO</label>
+                                                <textarea class="form-control" rows="3" name="cpParecercol2_tb" id="cpParecercol2_tb" onkeyup="$('#cpParecercol2').val(this.value)" onchange="$('#cpParecercol2').val(this.value)" placeholder="Escreva observações ou os motivos da devolução..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                 
+                                <!-- DIV 3: PAINEL CORREÇÃO -->
+                                <div class="panel panel-danger painel-correcao-dinamico" style="margin-bottom: 30px;">
+                                    <div class="panel-heading" style="background-color: #d9534f !important; color: white; border: none;">
+                                        <h3 class="panel-title">
+                                            <i class="fluigicon fluigicon-form fluigicon-sm"></i>
+                                            <span class="titulo-painel-correcao">Correção</span>
+                                        </h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-12 form-group">
+                                                <label>Observações da Correção</label>
+                                                <textarea class="form-control" rows="4" name="cpObservacoesCorrecao_tb" id="cpObservacoesCorrecao_tb" placeholder="Insira as observações sobre a correção..."></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row row-anexo-interno">
+                                            <div class="col-md-12">
+                                                <div class="caixa-anexo">
+                                                    <label><span class="fluigicon fluigicon-paperclip"></span> Documento Anexo (Correção)</label>
+                                                    <div class="fluigFormAttachmentComponent">
+                                                        <input type="text" class="form-control" readonly name="cpAnexoCorrecao_tb" id="cpAnexoCorrecao_tb" data-filename="Anexo_Correcao_Afastamento" data-accept="*">
+                                                        <div class="fluigFormAttachmentComponent_buttons area-botoes-anexo" style="display:none;">
+                                                            <button type="button" class="btn-anexo-historico btn-visualizar-injetado" title="Visualizar Anexo" style="display:none;"></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                 
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> <!-- Fim Tabela Oculta -->
+            
+            <!-- AÇÃO SOLICITANTE FINAL -->
+            <div class="panel panel-primary" id="divReabertura" style="display: none;">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fluigicon fluigicon-form fluigicon-sm"></i> Ação Solicitante</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="cpReaberturaChamado">Ação do Solicitante</label>
+                            <select class="form-control" name="cpReaberturaChamado" id="cpReaberturaChamado">
+                                <option value="">Selecione...</option>
+                                <option value="2">Finalizar Solicitação</option>
+                                <option value="1">Reencaminhar para o BPO</option>
+                                <option value="3">Cancelar Solicitação</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="cpParecerReabertura">Resposta / Parecer</label>
+                            <textarea rows="3" class="form-control" name="cpParecerReabertura" id="cpParecerReabertura" placeholder="Descreva o motivo da sua ação..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </form>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        
+        setTimeout(function() {
+            if(window["dptoObraColab"]) window["dptoObraColab"].disable(true);
+            if(window["nomeColaborador"]) window["nomeColaborador"].disable(true);
+            
+            var atvAtual = (typeof ATIVIDADE_ATUAL !== 'undefined') ? ATIVIDADE_ATUAL : 0;
+            var modo = (typeof MODO_FORMULARIO !== 'undefined') ? MODO_FORMULARIO : 'ADD';
+            
+            // Tratar os asteriscos e visibilidade caso o formulário seja recarregado
+            tratarAcaoAfastamento($("#cpTipoAfastamento").val());
+            
+            // Oculta/Bloqueia o painel de Afastamento caso não tenha colaborador selecionado (Atividades Iniciais)
+            if ((atvAtual == 0 || atvAtual == 3 || atvAtual == 6) && modo !== "VIEW") {
+                if ($("#matricula").val() == "") {
+                    $("#painelAfastamento .panel-body").css({"pointer-events": "none", "opacity": "0.4"});
+                }
+            }
+            
+            // Exibe a Flag de Validação caso esteja com o BPO (Atividade 4) ou Histórico (VIEW)
+            if (atvAtual >= 4 || modo === "VIEW") {
+                $('.checkbox-validacao-bpo').show();
+            }
+            $(".fluigicon-trash").hide();
+            
+            // CONSTRUÇÃO MÁGICA DO HISTÓRICO
+            if (modo !== "VIEW") {
+                var rows = $("input[id*='tipoInteracao___']");
+                var totalRows = rows.length;
+                var lastType = totalRows > 0 ? rows.last().val() : "";
+
+                if (atvAtual == 0 || atvAtual == 3) {
+                    if (totalRows === 0) adicionarInteracao("SOLICITANTE");
+                } 
+                else if (atvAtual == 4) {
+                    if (lastType !== "BPO") adicionarInteracao("BPO");
+                } 
+                else if (atvAtual == 6) {
+                    if (lastType !== "CORRECAO") adicionarInteracao("CORRECAO");
+                }
+            }
+            
+            // Exibe Ação Solicitante no fim (Atividade 11)
+            if (atvAtual == 11 && modo !== "VIEW") {
+                $("#divReabertura").show();
+            } else {
+                $("#divReabertura").hide();
+            }
+            
+            // Restaura Cores e Nomes e injeta na Timeline cronológica com leitura segura
+            restaurarEstilosPaineisDeObservacao();
+            
+            // Congela o resto
+            aplicarCongelamento();
+
+        }, 1200);
+    });
+
+    // Função de tratamento do campo Ação do Afastamento
+    function tratarAcaoAfastamento(valor) {
+        var $painelDataInicio = $("#DataInicio").closest('.form-group');
+        var $painelDataFim = $("#DataFim").closest('.form-group');
+        var $painelTipoAfastamento = $("#cpTipoAfastamentoRM").closest('.form-group');
+        var $painelMotivo = $("#cpMotivoAfastamento").closest('.form-group');
+
+        // Se não houver ação selecionada, oculta os campos dependentes
+        if (!valor || valor === "") {
+            $painelDataInicio.hide();
+            $painelDataFim.hide();
+            $painelTipoAfastamento.hide();
+            $painelMotivo.hide();
+            
+            // Limpa os campos por segurança
+            $("#DataInicio, #DataFim").val('');
+            if (window["cpTipoAfastamentoRM"]) window["cpTipoAfastamentoRM"].clear();
+            if (window["cpMotivoAfastamento"]) window["cpMotivoAfastamento"].clear();
+            
+            return; // Encerra a função aqui
+        }
+
+        // Caso contrário, mostra os painéis base e remove os asteriscos condicionais
+        $painelDataInicio.show();
+        $painelDataFim.show();
+        $painelTipoAfastamento.show();
+        $painelMotivo.show();
+        $("#lblDataFim").removeClass("label-obrigatorio");
+        $("#lblMotivoAfastamento").removeClass("label-obrigatorio");
+
+        if (valor === "1") {
+            // Histórico Completo: Exige Data Fim e Motivo também
+            $("#lblDataFim").addClass("label-obrigatorio");
+            $("#lblMotivoAfastamento").addClass("label-obrigatorio");
+            
+        } else if (valor === "2") {
+            // Início de Afastamento: Oculta a Data Fim e exige o Motivo
+            $painelDataFim.hide();
+            $("#DataFim").val('');
+            $("#lblMotivoAfastamento").addClass("label-obrigatorio");
+            
+        } else if (valor === "3") {
+            // ----------------------------------------------------
+            // Lógica de Retorno
+            // ----------------------------------------------------
+            var codigoOculto = $("#codSituacaoOculto").val();
+            var modo = (typeof MODO_FORMULARIO !== 'undefined') ? MODO_FORMULARIO : 'ADD';
+            
+            if (modo !== "VIEW" && codigoOculto) {
+                var codLimpo = codigoOculto.trim().toUpperCase();
+                
+                // Bloqueia com base APENAS no código oficial (A=Ativo, F=Férias. Passam: P, T, E, L, I, R)
+                var letrasPermitidas = ["P", "T", "E", "L", "I", "R"];
+                
+                if (letrasPermitidas.indexOf(codLimpo) === -1) {
+                    FLUIGC.toast({
+                        title: 'Atenção: ',
+                        message: 'O colaborador não se encontra afastado.',
+                        type: 'warning',
+                        timeout: 6000
+                    });
+                    
+                    // Zera apenas a ação escolhida e interrompe, MANTENDO o colaborador na tela
+                    setTimeout(function() {
+                        $("#cpTipoAfastamento").val("");
+                        tratarAcaoAfastamento("");
+                    }, 50);
+                    return; 
+                }
+            }
+
+            // Retorno (Se passou na validação): Oculta Início, Tipo e Motivo. Deixa apenas a Data Fim
+            $painelDataInicio.hide();
+            $("#DataInicio").val('');
+            
+            $painelTipoAfastamento.hide();
+            if (window["cpTipoAfastamentoRM"]) window["cpTipoAfastamentoRM"].clear();
+            
+            $painelMotivo.hide();
+            if (window["cpMotivoAfastamento"]) window["cpMotivoAfastamento"].clear();
+            
+            $("#lblDataFim").addClass("label-obrigatorio");
+        }
+    }
+
+    // Função de busca dinâmica do Gestor via API
+    function buscarGestorAjax(codSecao, codColigada, callbackSucesso, callbackErro) {
+        var requestData = {
+            "name": "ds_gestoresColaboradoresSecao",
+            "fields": [],
+            "constraints": [
+                { "_field": "CODSECAO", "_initialValue": String(codSecao).trim(), "_finalValue": String(codSecao).trim(), "_type": 1, "_likeSearch": false },
+                { "_field": "CODCOLIGADA", "_initialValue": String(codColigada).trim(), "_finalValue": String(codColigada).trim(), "_type": 1, "_likeSearch": false }
+            ],
+            "order": []
+        };
+
+        var processarRetorno = function(data) {
+            var content = [];
+            if (data && Array.isArray(data.values)) { content = data.values; } 
+            else if (data && data.content && Array.isArray(data.content.values)) { content = data.content.values; } 
+            else if (data && Array.isArray(data.content)) { content = data.content; } 
+            else if (Array.isArray(data)) { content = data; }
+            callbackSucesso(content);
+        };
+
+        var tentarFallback = function() {
+            $.ajax({
+                url: '/ecm/api/rest/ecm/dataset/getDataset',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(requestData),
+                success: processarRetorno,
+                error: callbackErro
+            });
+        };
+
+        try {
+            if (typeof window.parent !== 'undefined' && window.parent.WCMAPI) {
+                window.parent.WCMAPI.Create({
+                    url: "/api/public/ecm/dataset/datasets/",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(requestData),
+                    success: processarRetorno,
+                    error: function(err) { tentarFallback(); }
+                });
+            } else { tentarFallback(); }
+        } catch(e) { tentarFallback(); }
+    }
+
+    // Lógica de preenchimento e cascata dos Zooms
+    function setSelectedZoomItem(selectedItem) {
+        if (selectedItem.inputId == "empresaColab") {
+            window["dptoObraColab"].disable(false);
+            
+            var filter = "CODCOLIGADA," + selectedItem.COLIGADA;
+            if (selectedItem.CODFILIAL) { filter += ",CODFILIAL," + selectedItem.CODFILIAL; }
+            reloadZoomFilterValues("dptoObraColab", filter);
+        }
+        
+        if (selectedItem.inputId == "dptoObraColab") {
+            window["nomeColaborador"].disable(false);
+            reloadZoomFilterValues("nomeColaborador", "CODSECAO," + selectedItem.CODIGO);
+        }
+        
+        if (selectedItem.inputId == "nomeColaborador") {
+            
+            var acaoAfastamento = $("#cpTipoAfastamento").val();
+            
+            // Pega o código em letra (A, P, T, I)
+            var valCodSit = selectedItem.CODSITUACAO || "";
+            if (Array.isArray(valCodSit)) valCodSit = valCodSit[0];
+            var codSitLimpo = String(valCodSit).trim().toUpperCase();
+
+            // Pega a string bonitinha (Af.Ac.Trabalho)
+            var valSit = selectedItem.SITUACAO || "";
+            if (Array.isArray(valSit)) valSit = valSit[0];
+            var sitStr = String(valSit).trim();
+
+            // 1. PREENCHE TUDO PRIMEIRO (Garante que os dados fiquem na tela)
+            $("#matricula").val(selectedItem.CHAPA || "");
+            $("#cargo").val(selectedItem.CARGO || "");
+            $("#dataAdmissao").val(selectedItem.DATAADMISSAO || "");
+            $("#tipoFuncionario").val(selectedItem.TIPOFUNCIONARIO || "");
+            $("#codSituacao").val(sitStr); 
+            $("#codSituacaoOculto").val(codSitLimpo); 
+            $("#TxtChapa").val(selectedItem.CHAPA || "");
+            
+            $("#gestor").val("Buscando gestor...");
+            
+            // Desbloqueia o painel de afastamento visualmente
+            $("#painelAfastamento .panel-body").css({"pointer-events": "auto", "opacity": "1"});
+
+            // 2. VALIDAÇÃO DE BLOQUEIO DE AÇÃO PARA RETORNO
+            var letrasPermitidas = ["P", "T", "E", "L", "I", "R"];
+            var isAfastado = (codSitLimpo !== "" && letrasPermitidas.indexOf(codSitLimpo) !== -1);
+
+            if (!isAfastado) {
+                // Se já estivesse com Retorno selecionado antes do zoom, avisa e limpa a ação (Mantendo o Colaborador)
+                if (acaoAfastamento === "3") {
+                    FLUIGC.toast({
+                        title: 'Atenção: ',
+                        message: 'O colaborador não se encontra afastado.',
+                        type: 'warning',
+                        timeout: 5000
+                    });
+                    $("#cpTipoAfastamento").val("");
+                    tratarAcaoAfastamento("");
+                }
+            }
+            
+            setTimeout(function() {
+                var codSecao = Array.isArray(selectedItem.CODSECAO) ? selectedItem.CODSECAO[0] : selectedItem.CODSECAO;
+                var codColigada = Array.isArray(selectedItem.CODCOLIGADA) ? selectedItem.CODCOLIGADA[0] : selectedItem.CODCOLIGADA;
+
+                if (codSecao && codColigada) {
+                    buscarGestorAjax(codSecao, codColigada, function(content) {
+                        if (content && content.length > 0) {
+                            var row = content[0];
+                            if (row.ERRO) {
+                                $("#gestor").val("Erro ao ler integração (F12)");
+                                return;
+                            }
+
+                            var codGestor = row.CHAPASUBST && String(row.CHAPASUBST) !== "null" ? String(row.CHAPASUBST).trim() : "";
+                            var nomeGestor = row.NOME1 && String(row.NOME1) !== "null" ? String(row.NOME1).trim() : "";
+                            
+                            if (codGestor !== "" && nomeGestor !== "") {
+                                $("#gestor").val(codGestor + " - " + nomeGestor);
+                            } else if (nomeGestor !== "") {
+                                $("#gestor").val(nomeGestor);
+                            } else if (codGestor !== "") {
+                                $("#gestor").val(codGestor);
+                            } else {
+                                $("#gestor").val("Gestor cadastrado sem nome ou código");
+                            }
+
+                        } else {
+                            $("#gestor").val("Nenhum gestor encontrado na tabela");
+                        }
+                    }, function(err) {
+                        console.error("Erro na requisição do gestor: ", err);
+                        $("#gestor").val("Falha de comunicação (401)");
+                    });
+                } else {
+                    $("#gestor").val("Colaborador sem Seção/Coligada");
+                }
+            }, 150);
+        }
+    }
+
+    // Limpeza dos campos em cascata e rebloqueio do painel
+    function removedZoomItem(removedItem) {
+        var colaboradorRemovido = false;
+
+        if (removedItem.inputId == "empresaColab") {
+            reloadZoomFilterValues("dptoObraColab", "");
+            if(window["dptoObraColab"]) { window["dptoObraColab"].clear(); window["dptoObraColab"].disable(true); }
+            
+            reloadZoomFilterValues("nomeColaborador", "");
+            if(window["nomeColaborador"]) { window["nomeColaborador"].clear(); window["nomeColaborador"].disable(true); }
+            
+            $("#matricula, #cargo, #dataAdmissao, #gestor, #tipoFuncionario, #codSituacao, #codSituacaoOculto, #TxtChapa").val("");
+            colaboradorRemovido = true;
+        }
+
+        if (removedItem.inputId == "dptoObraColab") {
+            reloadZoomFilterValues("nomeColaborador", "");
+            if(window["nomeColaborador"]) { window["nomeColaborador"].clear(); window["nomeColaborador"].disable(true); }
+            
+            $("#matricula, #cargo, #dataAdmissao, #gestor, #tipoFuncionario, #codSituacao, #codSituacaoOculto, #TxtChapa").val("");
+            colaboradorRemovido = true;
+        }
+
+        if (removedItem.inputId == "nomeColaborador") {
+            $("#matricula, #cargo, #dataAdmissao, #gestor, #tipoFuncionario, #codSituacao, #codSituacaoOculto, #TxtChapa").val("");
+            colaboradorRemovido = true;
+        }
+
+        // Se limpou o colaborador, bloqueia o painel de afastamento novamente e zera os campos
+        if (colaboradorRemovido) {
+            $("#painelAfastamento .panel-body").css({"pointer-events": "none", "opacity": "0.4"});
+            $("#cpTipoAfastamento, #DataInicio, #DataFim").val('');
+            
+            if(window["cpTipoAfastamentoRM"]) window["cpTipoAfastamentoRM"].clear();
+            if(window["cpMotivoAfastamento"]) window["cpMotivoAfastamento"].clear();
+            
+            // Restaura a visibilidade padrão do painel (tudo visível mas sem asteriscos)
+            tratarAcaoAfastamento("");
+        }
+    }
+
+    // Mostra ou Esconde o campo "Parecer do BPO" baseado na Decisão
+    window.tratarAcaoBPO = function(obj) {
+        var $painel = $(obj).closest('.panel-body');
+        var valor = $(obj).val();
+        
+        if(valor === 'Incorreto') {
+            $painel.find('.linha-parecer-bpo').slideDown(300);
+        } else {
+            $painel.find('.linha-parecer-bpo').slideUp(300);
+            // Limpa o conteúdo se o usuário mudar de ideia para "Correto"
+            $painel.find('textarea[name^="cpParecercol2_tb"]').val('').trigger('change');
+            $('#cpParecercol2').val('');
+        }
+    }
+
+    function adicionarInteracao(tipo) {
+        var rowId = wdkAddChild('tbInteracoes');
+        $(".fluigicon-trash").hide(); 
+        
+        var $linha = $("#tipoInteracao___" + rowId).closest("tr");
+        $("#tipoInteracao___" + rowId).val(tipo);
+
+        $linha.find(".painel-solicitante-dinamico, .painel-bpo-dinamico, .painel-correcao-dinamico").hide();
+
+        if (tipo === "SOLICITANTE") {
+            $linha.find(".painel-solicitante-dinamico").show();
+            $("#cpAnexoGeral_tb___" + rowId).fluigFormAttachment({ showActionButton: true, prefixName: true });
+        } else if (tipo === "CORRECAO") {
+            $linha.find(".painel-correcao-dinamico").show();
+            $("#cpAnexoCorrecao_tb___" + rowId).fluigFormAttachment({ showActionButton: true, prefixName: true });
+        } else if (tipo === "BPO") {
+            $linha.find(".painel-bpo-dinamico").show();
+            $("#cpRespGestor2_tb___" + rowId).val($("#cpRespGestor2").val());
+        }
+    }
+
+    // Função universal e segura para ler dados em ADD/MOD e VIEW
+    function getFieldValue($container, fieldBaseName) {
+        var $el = $container.find("[id*='" + fieldBaseName + "___']");
+        if ($el.length === 0) return "";
+
+        var val = "";
+        if ($el.is("input") || $el.is("textarea")) {
+            val = $el.val();
+        } else if ($el.is("select")) {
+            val = $el.val();
+            if (!val) val = $el.find("option:selected").text();
+        } else {
+            val = $el.text();
+        }
+        return (val || "").trim();
+    }
+
+    function restaurarEstilosPaineisDeObservacao() {
+        var contSol = 0;
+        var contBPO = 0;
+        var contCor = 0;
+        var modo = (typeof MODO_FORMULARIO !== 'undefined') ? MODO_FORMULARIO : 'ADD';
+        
+        var timeline = $("#historico-timeline");
+        
+        var $todasAsLinhas = $(".td-interacao");
+        var totalLinhas = $todasAsLinhas.length;
+
+        $todasAsLinhas.each(function(index) {
+            var $linha = $(this);
+            
+            var isTemplate = false;
+            var $idField = $linha.find("[id*='cpObservacoesGerais_tb___']").first();
+            if ($idField.length > 0) {
+                var idVal = $idField.attr("id");
+                if (idVal && idVal.indexOf("___") === idVal.length - 3) {
+                    isTemplate = true;
+                }
+            }
+            if (modo !== "VIEW" && isTemplate) return;
+
+            var isLast = (index === totalLinhas - 1);
+            
+            $linha.find(".painel-solicitante-dinamico, .painel-bpo-dinamico, .painel-correcao-dinamico").hide();
+
+            var obsGeral = getFieldValue($linha, "cpObservacoesGerais_tb");
+            var anexoGeral = getFieldValue($linha, "cpAnexoGeral_tb");
+            var parecerBPO = getFieldValue($linha, "cpParecercol2_tb");
+            var decisaoBPO = getFieldValue($linha, "cpDecisaoRH_tb");
+            var obsCor = getFieldValue($linha, "cpObservacoesCorrecao_tb");
+            var anexoCor = getFieldValue($linha, "cpAnexoCorrecao_tb");
+            var tipo = getFieldValue($linha, "tipoInteracao");
+            
+            if (tipo === "") {
+                if (obsCor !== "" || anexoCor !== "") tipo = "CORRECAO";
+                else if (parecerBPO !== "" || (decisaoBPO !== "" && decisaoBPO !== "Selecione...")) tipo = "BPO";
+                else if (obsGeral !== "" || anexoGeral !== "") tipo = "SOLICITANTE";
+            }
+
+            var temConteudo = false;
+            if (tipo === "SOLICITANTE" && (obsGeral !== "" || anexoGeral !== "")) temConteudo = true;
+            var temDecisao = (decisaoBPO !== "" && decisaoBPO !== "Selecione...");
+            if (tipo === "BPO" && (parecerBPO !== "" || temDecisao)) temConteudo = true;
+            if (tipo === "CORRECAO" && (obsCor !== "" || anexoCor !== "")) temConteudo = true;
+
+            if (!temConteudo) { 
+                if (modo === "VIEW" || !isLast) { return; } 
+            }
+
+            var $painelAExtrair = null;
+            
+            if (tipo === "SOLICITANTE") {
+                contSol++;
+                $painelAExtrair = $linha.find(".painel-solicitante-dinamico");
+                $painelAExtrair.show();
+                $painelAExtrair.find(".titulo-painel-solicitante").text("Observações e Anexos");
+
+            } else if (tipo === "CORRECAO") {
+                contCor++;
+                $painelAExtrair = $linha.find(".painel-correcao-dinamico");
+                $painelAExtrair.show();
+                $painelAExtrair.find(".titulo-painel-correcao").text("Correção " + contCor);
+
+            } else if (tipo === "BPO") {
+                contBPO++;
+                $painelAExtrair = $linha.find(".painel-bpo-dinamico");
+                $painelAExtrair.show();
+                $painelAExtrair.find(".titulo-painel-bpo").text("Operação IRHO " + contBPO);
+                
+                if (parecerBPO !== "") {
+                    $painelAExtrair.find(".linha-parecer-bpo").show();
+                } else {
+                    $painelAExtrair.find(".linha-parecer-bpo").hide();
+                }
+            }
+            
+            if ($painelAExtrair && $painelAExtrair.length > 0) {
+                $painelAExtrair.css({"margin-bottom": "0", "display": "block", "visibility": "visible"});
+                timeline.append($painelAExtrair); 
+            }
+        });
+    }
+
+    function aplicarCongelamento() {
+        var atvAtual = (typeof ATIVIDADE_ATUAL !== 'undefined') ? ATIVIDADE_ATUAL : 0;
+        var modo = (typeof MODO_FORMULARIO !== 'undefined') ? MODO_FORMULARIO : 'ADD';
+
+        if (modo == "VIEW" || atvAtual == 4 || atvAtual == 6 || atvAtual == 11) {
+            var secoesFixas = ["#painelSolicitante", "#painelColaborador", "#painelAfastamento", "#divReabertura"];
+
+            $.each(secoesFixas, function(i, secao) {
+                // Remove o opacity caso tenha herdado
+                $(secao).find(".panel-body").css("opacity", "1");
+                $(secao).find("input, select, textarea").attr("readonly", true).css("pointer-events", "none").css("background-color", "#f4f6f9");
+                $(secao).find("input[type=checkbox]").attr("disabled", true);
+            });
+            
+            if (atvAtual == 4 && modo !== "VIEW") {
+                $(".checkbox-validacao-bpo input[type='checkbox']").attr("disabled", false).prop("readonly", false).css({"pointer-events": "auto", "background-color": "transparent"});
+            }
+
+            var zooms = ["empresaColab", "dptoObraColab", "nomeColaborador", "cpTipoAfastamentoRM", "cpMotivoAfastamento"];
+            zooms.forEach(function(z) { if(window[z]) window[z].disable(true); });
+        }
+
+        var $todasAsLinhas = $(".td-interacao");
+        var totalLinhas = $todasAsLinhas.length;
+
+        $todasAsLinhas.each(function(index) {
+            var $linhaAtual = $(this);
+            
+            var isTemplate = false;
+            var $idField = $linhaAtual.find("[id*='cpObservacoesGerais_tb___']").first();
+            if ($idField.length > 0) {
+                var idVal = $idField.attr("id");
+                if (modo !== "VIEW" && idVal && idVal.indexOf("___") === idVal.length - 3) isTemplate = true;
+            }
+            if (isTemplate) return;
+
+            var isLast = (index === totalLinhas - 1);
+            
+            var obsGeral = getFieldValue($linhaAtual, "cpObservacoesGerais_tb");
+            var anexoGeral = getFieldValue($linhaAtual, "cpAnexoGeral_tb");
+            var parecerBPO = getFieldValue($linhaAtual, "cpParecercol2_tb");
+            var decisaoBPO = getFieldValue($linhaAtual, "cpDecisaoRH_tb");
+            var obsCor = getFieldValue($linhaAtual, "cpObservacoesCorrecao_tb");
+            var anexoCor = getFieldValue($linhaAtual, "cpAnexoCorrecao_tb");
+
+            var tipo = getFieldValue($linhaAtual, "tipoInteracao");
+            if (tipo === "") {
+                if (obsCor !== "" || anexoCor !== "") tipo = "CORRECAO";
+                else if (parecerBPO !== "" || (decisaoBPO !== "" && decisaoBPO !== "Selecione...")) tipo = "BPO";
+                else if (obsGeral !== "" || anexoGeral !== "") tipo = "SOLICITANTE";
+            }
+
+            if (tipo === "") return; 
+
+            var congelarLinha = false;
+            
+            if (modo === "VIEW") {
+                congelarLinha = true;
+            } else if (atvAtual == 4) {
+                congelarLinha = !(isLast && tipo === "BPO");
+            } else if (atvAtual == 6) {
+                congelarLinha = !(isLast && tipo === "CORRECAO");
+            } else if (atvAtual == 11) {
+                congelarLinha = true;
+            }
+
+            if (congelarLinha) {
+                $linhaAtual.find("input, select, textarea").attr("readonly", true).css("pointer-events", "none").css("background-color", "#f4f6f9");
+                $linhaAtual.find("select").attr("disabled", true);
+                
+                if (tipo === "SOLICITANTE" || tipo === "CORRECAO") {
+                    var isCorrecao = (tipo === "CORRECAO");
+                    var nomeArquivo = isCorrecao ? anexoCor : anexoGeral;
+                    
+                    $linhaAtual.find(".fluigFormAttachmentBtnDeleteFile, .fluigFormAttachmentBtnUploadFile").hide();
+
+                    if (nomeArquivo !== "") {
+                        $linhaAtual.find(".row-anexo-interno").show();
+                        $linhaAtual.find(".area-botoes-anexo").show();
+                        var $btnVis = $linhaAtual.find(".btn-visualizar-injetado");
+                        $btnVis.show();
+                        $btnVis.off("click").on("click", function() { abrirAnexoFluigNativo(nomeArquivo); });
+                    } else {
+                        $linhaAtual.find(".row-anexo-interno").hide(); 
+                    }
+                }
+            }
+        });
+    }
+    
+    function abrirAnexoFluigNativo(fileName) {
+        try {
+            if (!parent.ECM || !parent.ECM.attachmentTable) return;
+            var attachIndex = parent.ECM.attachmentTable.getData().findIndex(function(a) { return a.description === fileName; });
+            if (attachIndex === -1) { FLUIGC.toast({title: "Atenção", message: "Anexo não encontrado. Acesse pela aba 'Anexos'.", type: "warning"}); return; }
+            var e = parent.ECM.attachmentTable.getRow(attachIndex);
+            if (e.documentId) {
+                var t = parent.WCMAPI ? parent.WCMAPI.tenantCode || parent.WCMAPI.organizationId : 1;
+                parent.WKFViewAttachment.openAttachmentView(t, e.documentId, e.version);
+            } else { FLUIGC.toast({title: "Aviso", message: "Arquivo não sincronizado. Envie a solicitação primeiro.", type: "info"}); }
+        } catch(e) { console.error(e); FLUIGC.toast({title: "Erro", message: "Use a aba 'Anexos' na barra superior.", type: "danger"}); }
+    }
+</script>
+</body>
+</html>
