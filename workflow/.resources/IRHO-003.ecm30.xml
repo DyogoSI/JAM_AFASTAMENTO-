@@ -28,7 +28,7 @@
     <processDefinitionVersionPK>
       <companyId>1</companyId>
       <processId>Afastamento</processId>
-      <version>4</version>
+      <version>6</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
     <formId>46</formId>
@@ -60,8 +60,8 @@
       <deadlineTime>0</deadlineTime>
       <joint>false</joint>
       <agreementPercentage>0</agreementPercentage>
-      <engineAllocationId>Usuário</engineAllocationId>
-      <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;User&gt;jam-engenharia&lt;/User&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
+      <engineAllocationId></engineAllocationId>
+      <engineAllocationConfiguration></engineAllocationConfiguration>
       <selectColleague>1</selectColleague>
       <initialState>true</initialState>
       <notifyAuthorityDelay>true</notifyAuthorityDelay>
@@ -104,15 +104,15 @@
         <version>1</version>
         <sequence>4</sequence>
       </processStatePK>
-      <stateName>Resposta RH</stateName>
-      <stateDescription>Resposta RH</stateDescription>
+      <stateName>Operação IRHO</stateName>
+      <stateDescription>Operação IRHO</stateDescription>
       <instruction></instruction>
       <deadlineTime>0</deadlineTime>
       <deadlineFieldName></deadlineFieldName>
       <joint>false</joint>
       <agreementPercentage>0</agreementPercentage>
-      <engineAllocationId>Pool Papel</engineAllocationId>
-      <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;Role&gt;admin&lt;/Role&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
+      <engineAllocationId>Usuário</engineAllocationId>
+      <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;User&gt;jam-engenharia&lt;/User&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
       <selectColleague>1</selectColleague>
       <initialState>false</initialState>
       <notifyAuthorityDelay>true</notifyAuthorityDelay>
@@ -498,7 +498,7 @@
         <companyId>1</companyId>
         <processId>IRHO-003</processId>
         <expressionOrder>1</expressionOrder>
-        <version>4</version>
+        <version>6</version>
         <sequence>5</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpDecisaoRH&quot;) == &quot;Incorreto&quot;</condition>
@@ -510,7 +510,7 @@
         <companyId>1</companyId>
         <processId>IRHO-003</processId>
         <expressionOrder>2</expressionOrder>
-        <version>4</version>
+        <version>6</version>
         <sequence>5</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpDecisaoRH&quot;) == &quot;Correto&quot;</condition>
@@ -522,7 +522,7 @@
         <companyId>1</companyId>
         <processId>IRHO-003</processId>
         <expressionOrder>1</expressionOrder>
-        <version>4</version>
+        <version>6</version>
         <sequence>13</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpReaberturaChamado&quot;) == &quot;1&quot;</condition>
@@ -534,7 +534,7 @@
         <companyId>1</companyId>
         <processId>IRHO-003</processId>
         <expressionOrder>2</expressionOrder>
-        <version>4</version>
+        <version>6</version>
         <sequence>13</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpReaberturaChamado&quot;) == &quot;2&quot;</condition>
@@ -546,7 +546,7 @@
         <companyId>1</companyId>
         <processId>IRHO-003</processId>
         <expressionOrder>3</expressionOrder>
-        <version>4</version>
+        <version>6</version>
         <sequence>13</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpReaberturaChamado&quot;) == &quot;3&quot;</condition>

@@ -467,6 +467,20 @@
 <script type="text/javascript">
     $(document).ready(function() {
         
+        // =========================================================================
+        // CORREÇÃO DE CORS NO UPLOAD: Intercepta e reescreve a URL do servidor
+        // =========================================================================
+        if (parent && parent.$) {
+            parent.$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+                // Verifica se a requisição está indo para a rota nativa de upload do Fluig
+                if (options.url && options.url.indexOf("/ecm/upload") !== -1) {
+                    // Remove qualquer IP ou Domínio fixo da URL e força usar o domínio atual do navegador
+                    options.url = options.url.replace(/^https?:\/\/[^\/]+/, window.location.origin);
+                }
+            });
+        }
+        // =========================================================================
+
         setTimeout(function() {
             if(window["dptoObraColab"]) window["dptoObraColab"].disable(true);
             if(window["nomeColaborador"]) window["nomeColaborador"].disable(true);
@@ -559,6 +573,36 @@
             return; 
         }
 
+        var codigoOculto = $("#codSituacaoOculto").val();
+        var situacaoDesc = $("#codSituacao").val();
+        var modo = (typeof MODO_FORMULARIO !== 'undefined') ? MODO_FORMULARIO : 'ADD';
+        
+        if (modo !== "VIEW" && codigoOculto) {
+            var codLimpo = codigoOculto.trim().toUpperCase();
+            var letrasPermitidas = ["P", "T", "E", "L", "I", "R"];
+            var isAfastado = (letrasPermitidas.indexOf(codLimpo) !== -1);
+            
+            // Validação 1: Tentou Início (2) ou Início/Fim (1) e JÁ ESTÁ afastado
+            if ((valor === "1" || valor === "2") && isAfastado) {
+                FLUIGC.toast({ title: 'Atenção: ', message: 'Esse colaborador ja esta afastado. (Status atual: ' + situacaoDesc + ')', type: 'warning', timeout: 6000 });
+                setTimeout(function() {
+                    $("#cpTipoAfastamento").val("");
+                    tratarAcaoAfastamento("");
+                }, 50);
+                return;
+            }
+            
+            // Validação 2: Tentou Retorno (3) e NÃO ESTÁ afastado (Lógica original)
+            if (valor === "3" && !isAfastado) {
+                FLUIGC.toast({ title: 'Atenção: ', message: 'O colaborador não se encontra afastado. (Status atual: ' + situacaoDesc + ')', type: 'warning', timeout: 6000 });
+                setTimeout(function() {
+                    $("#cpTipoAfastamento").val("");
+                    tratarAcaoAfastamento("");
+                }, 50);
+                return; 
+            }
+        }
+
         $painelDataInicio.show();
         $painelDataFim.show();
         $painelTipoAfastamento.show();
@@ -576,24 +620,6 @@
             $("#lblMotivoAfastamento").addClass("label-obrigatorio");
             
         } else if (valor === "3") {
-            var codigoOculto = $("#codSituacaoOculto").val();
-            var situacaoDesc = $("#codSituacao").val();
-            var modo = (typeof MODO_FORMULARIO !== 'undefined') ? MODO_FORMULARIO : 'ADD';
-            
-            if (modo !== "VIEW" && codigoOculto) {
-                var codLimpo = codigoOculto.trim().toUpperCase();
-                var letrasPermitidas = ["P", "T", "E", "L", "I", "R"];
-                
-                if (letrasPermitidas.indexOf(codLimpo) === -1) {
-                    FLUIGC.toast({ title: 'Atenção: ', message: 'O colaborador não se encontra afastado. (Status atual: ' + situacaoDesc + ')', type: 'warning', timeout: 6000 });
-                    setTimeout(function() {
-                        $("#cpTipoAfastamento").val("");
-                        tratarAcaoAfastamento("");
-                    }, 50);
-                    return; 
-                }
-            }
-
             $painelDataInicio.hide();
             $("#DataInicio").val('');
             
@@ -921,15 +947,19 @@
             var letrasPermitidas = ["P", "T", "E", "L", "I", "R"];
             var isAfastado = (codSitLimpo !== "" && letrasPermitidas.indexOf(codSitLimpo) !== -1);
 
-            if (!isAfastado) {
-                $("#cpTipoAfastamento option[value='3']").prop("disabled", false);
+            // Validação encadeada no evento de escolha da lupa
+            if (isAfastado) {
+                if (acaoAfastamento === "1" || acaoAfastamento === "2") {
+                    FLUIGC.toast({ title: 'Atenção: ', message: 'Esse colaborador ja esta afastado.', type: 'warning', timeout: 5000 });
+                    $("#cpTipoAfastamento").val("");
+                    tratarAcaoAfastamento("");
+                }
+            } else {
                 if (acaoAfastamento === "3") {
                     FLUIGC.toast({ title: 'Atenção: ', message: 'O colaborador não se encontra afastado.', type: 'warning', timeout: 5000 });
                     $("#cpTipoAfastamento").val("");
                     tratarAcaoAfastamento("");
                 }
-            } else {
-                $("#cpTipoAfastamento option[value='3']").prop("disabled", false);
             }
             
             setTimeout(function() {
